@@ -1,13 +1,20 @@
 FROM ubuntu:latest
 MAINTAINER Manfred Touron "m@42.am"
 
-RUN echo "deb http://archive.ubuntu.com/ubuntu precise universe" >> /etc/apt/sources.list
+ENV DEBIAN_FRONTEND noninteractive
 
-RUN apt-get -qqy update && \
-    apt-get -qqy install python-software-properties python g++ make && \
-    apt-get -qqy update && \
-    apt-get -qqy purge python-software-properties python g++ make && \
+RUN apt-get -qq -y install python-software-properties && \
     apt-get clean
 
-RUN apt-get -qqy install -y nodejs && \
+RUN add-apt-repository ppa:chris-lea/node.js && \
+    echo "deb http://archive.ubuntu.com/ubuntu precise main universe" >> /etc/apt/sources.list && \
+    apt-get -qq -y update && \
+    apt-get -qq -y install nodejs && \
     apt-get clean
+
+RUN mkdir /app && \
+    npm install -g coffee-script
+
+WORKDIR /app
+ENTRYPOINT node
+CMD -v
