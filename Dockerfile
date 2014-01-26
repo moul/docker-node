@@ -16,5 +16,4 @@ RUN mkdir /app && \
     npm install -g coffee-script
 
 WORKDIR /app
-ENTRYPOINT node
-CMD -v
+CMD node
